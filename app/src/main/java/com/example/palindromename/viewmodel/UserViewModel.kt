@@ -32,11 +32,9 @@ class UserViewModel : ViewModel() {
 
 
     fun fetchUsers(refresh: Boolean = false) {
-        Log.d("TEST", "Halo dari UserViewModel")
 
         if (_isLoading.value == true || _hasMore.value == false) return
 
-        Log.d("TEST2", "Halo dari UserViewModel")
 
         if (refresh) {
             page = 1
@@ -46,9 +44,6 @@ class UserViewModel : ViewModel() {
         }
 
         _isLoading.value = true
-
-        Log.d("TEST3", "Halo dari UserViewModel")
-
 
         viewModelScope.launch(Dispatchers.IO) {
             val url = URL("https://reqres.in/api/users?page=$page&per_page=10")
@@ -74,12 +69,6 @@ class UserViewModel : ViewModel() {
                     fetchedUsers.add(user)
                 }
 
-                Log.d("UserViewModel", "Fetched users count: ${fetchedUsers.size}")
-                for (user in fetchedUsers) {
-                    Log.d("UserViewModel", "User: ${user.first_name} ${user.last_name}")
-                }
-
-
                 val currentUsers = _users.value ?: emptyList()
 
                 if (fetchedUsers.isEmpty()) {
@@ -91,9 +80,10 @@ class UserViewModel : ViewModel() {
                 }
 
             } catch (e: Exception) {
-                Log.d("TEST5", "Halo dari UserViewModel")
 
                 e.printStackTrace()
+                _users.postValue(emptyList())
+                _isEmpty.postValue(true)
             } finally {
                 _isLoading.postValue(false)
             }

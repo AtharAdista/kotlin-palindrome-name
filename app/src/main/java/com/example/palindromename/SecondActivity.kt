@@ -14,21 +14,15 @@ class SecondActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
 
-        // Setup Toolbar
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        supportActionBar?.apply {
-            title = "Second Screen"
-            setDisplayHomeAsUpEnabled(true)
-        }
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        // Ambil data dari Intent
         val name = intent.getStringExtra("user_name") ?: ""
         val tvName = findViewById<TextView>(R.id.tvName)
         tvName.text = name
 
-        // Tombol Choose a User
         val btnChooseUser: Button = findViewById(R.id.btnChooseUser)
         btnChooseUser.setOnClickListener {
             val intent = Intent(this, ThirdActivity::class.java)

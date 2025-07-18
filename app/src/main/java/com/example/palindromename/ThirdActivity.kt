@@ -2,16 +2,16 @@ package com.example.palindromename
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.palindromename.viewmodels.UserViewModel
 import com.example.palindromename.widgets.UserAdapter
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import android.view.View
+import androidx.lifecycle.observe
 
 class ThirdActivity : AppCompatActivity() {
 
@@ -19,10 +19,16 @@ class ThirdActivity : AppCompatActivity() {
     private lateinit var userAdapter: UserAdapter
     private lateinit var swipeRefresh: SwipeRefreshLayout
     private lateinit var recyclerView: RecyclerView
+    private lateinit var emptyTextView: TextView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_third)
+
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         swipeRefresh = findViewById(R.id.swipeRefreshLayout)
         recyclerView = findViewById(R.id.recyclerView)
@@ -34,6 +40,16 @@ class ThirdActivity : AppCompatActivity() {
             }
             setResult(Activity.RESULT_OK, intent)
             finish()
+        }
+
+        emptyTextView = findViewById(R.id.tvEmpty)
+
+        userViewModel.isEmpty.observe(this) { isEmpty ->
+            if (isEmpty) {
+                emptyTextView.visibility = View.VISIBLE
+            } else {
+                emptyTextView.visibility = View.GONE
+            }
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -63,5 +79,10 @@ class ThirdActivity : AppCompatActivity() {
         })
 
         userViewModel.fetchUsers()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 }
