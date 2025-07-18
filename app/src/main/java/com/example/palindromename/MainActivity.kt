@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             val reversed = cleaned.reversed()
             val isPalindrome = cleaned == reversed
 
-            val message = if (isPalindrome) "Text ini adalah palindrome" else "Text ini bukan palindrome"
+            val message = if (isPalindrome) "isPalindrome" else "not palindrome"
             AlertDialog.Builder(this)
                 .setMessage(message)
                 .setPositiveButton("OK", null)
